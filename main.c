@@ -1,15 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Прототипы из ui.c
+// input.c
 void show_main_menu(void);
-int  read_menu_choice(void);
+int read_menu_choice(void);
 void clear_screen(void);
 void pause_for_enter(void);
+void exit_menu(void);
+
+// game.c
 void start_pvp(void);
 void start_pvc(void);
 void start_settings(void);
-void exit_menu(void);
 
 int main(void)
 {
