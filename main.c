@@ -13,8 +13,7 @@ void start_pvp(void);
 void start_pvc(void);
 void start_settings(void);
 
-int main(void)
-{
+int main(void) {
     while (1) {
         clear_screen();
         show_main_menu();

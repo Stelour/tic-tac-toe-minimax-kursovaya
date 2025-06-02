@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-void show_main_menu(void)
-{
+void show_main_menu(void) {
     printf("========================================\n");
     printf("===      Игра «Крестики-Нолики»      ===\n");
     printf("========================================\n");
@@ -13,8 +12,7 @@ void show_main_menu(void)
     printf("Введите номер пункта: ");
 }
 
-int read_menu_choice(void)
-{
+int read_menu_choice(void) {
     int choice;
     if (scanf("%d", &choice) != 1) {
         int c;
@@ -26,18 +24,16 @@ int read_menu_choice(void)
     return choice;
 }
 
-void clear_screen(void)
-{
+void clear_screen(void) {
     printf("\033[2J\033[H");
 }
 
-void pause_for_enter(void)
-{
+void pause_for_enter(void) {
     printf("Нажмите Enter, чтобы продолжить...");
     while (getchar() != '\n') { }
 }
 
-void exit_menu(void){
+void exit_menu(void) {
     clear_screen();
     printf("========================================\n");
     printf("===           Выход из игры       ===\n");

@@ -4,8 +4,7 @@
 void clear_screen(void);
 void pause_for_enter(void);
 
-int check_win(int N, int K, char field[N][N], char player)
-{
+int check_win(int N, int K, char field[N][N], char player) {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j <= N - K; j++) {
             int cnt = 0;
@@ -78,10 +77,11 @@ void start_pvp(void)
     const int N = 3;
     const int K = 3;
     char field[N][N];
-    int row, col;
+    int input_row, input_col;
     char current_player = 'X';
     int moves = 0;
 
+    // 1) Инициализируем поле символами '_'
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             field[i][j] = '_';
@@ -112,12 +112,23 @@ void start_pvp(void)
 
         if (moves == N * N) {
             printf("\nНичья! Поле заполнено.\n");
-            pause_for_enter();
+            printf("Введите 0 0, чтобы вернуться в меню PvP, или любую другую клавишу + Enter для главного меню.\n");
+            int c;
+            scanf("%d %d", &input_row, &input_col);
+            while ((c = getchar()) != '\n' && c != EOF) { }
+            if (input_row == 0 && input_col == 0) {
+                for (int i = 0; i < N; i++)
+                    for (int j = 0; j < N; j++)
+                        field[i][j] = '_';
+                current_player = 'X';
+                moves = 0;
+                continue;
+            }
             return;
         }
 
-        printf("\nВведите номер строки и номер столбца (оба от 1 до %d): ", N);
-        if (scanf("%d %d", &row, &col) != 2) {
+        printf("\nВведите строку и столбец (1..%d), или 0 0 для выхода: ", N);
+        if (scanf("%d %d", &input_row, &input_col) != 2) {
             int c;
             while ((c = getchar()) != '\n' && c != EOF) { }
             printf("Ошибка: нужно ввести два целых числа.\n");
@@ -128,8 +139,12 @@ void start_pvp(void)
         int c;
         while ((c = getchar()) != '\n' && c != EOF) { }
 
-        row--;
-        col--;
+        if (input_row == 0 && input_col == 0) {
+            return;
+        }
+
+        int row = input_row - 1;
+        int col = input_col - 1;
 
         if (row < 0 || row >= N || col < 0 || col >= N) {
             clear_screen();
@@ -151,7 +166,7 @@ void start_pvp(void)
         if (check_win(N, K, field, current_player)) {
             clear_screen();
             printf("========================================\n");
-            printf("     Режим PvP завершён: Победа %c     \n", current_player);
+            printf("=     PvP завершён: Победа %c          =\n", current_player);
             printf("========================================\n");
             printf("Финальное поле:\n\n");
 
@@ -167,16 +182,32 @@ void start_pvp(void)
                 }
                 printf("\n");
             }
-            pause_for_enter();
+
+            printf("\nВведите 0 0, чтобы начать новую PvP | ИЛИ | Enter для главного меню.\n");
+            int r, co;
+            if (scanf("%d %d", &r, &co) == 2) {
+                while ((c = getchar()) != '\n' && c != EOF) { }
+                if (r == 0 && co == 0) {
+                    for (int i = 0; i < N; i++)
+                        for (int j = 0; j < N; j++)
+                            field[i][j] = '_';
+                    current_player = 'X';
+                    moves = 0;
+                    continue;
+                }
+            }
             return;
         }
 
-        current_player = (current_player == 'X' ? 'O' : 'X');
+        if (current_player == 'X') {
+            current_player = 'O';
+        } else {
+            current_player = 'X';
+        }
     }
 }
 
-void start_pvc(void)
-{
+void start_pvc(void) {
     clear_screen();
     printf("========================================\n");
     printf("===      Заготовка: игра PvC         ===\n");
@@ -186,8 +217,7 @@ void start_pvc(void)
     pause_for_enter();
 }
 
-void start_settings(void)
-{
+void start_settings(void) {
     clear_screen();
     printf("========================================\n");
     printf("===      Заготовка: Настройки       ===\n");
