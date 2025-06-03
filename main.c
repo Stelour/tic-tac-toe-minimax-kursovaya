@@ -3,15 +3,16 @@
 
 int current_N = 3;
 int current_K = 3;
+int current_level = 1;
 
-// input.c
+//input.c
 void show_main_menu(void);
 int read_menu_choice(void);
 void clear_screen(void);
 void pause_for_enter(void);
 void exit_menu(void);
 
-// game.c
+//game.c
 void start_pvp(void);
 void start_pvc(void);
 void start_settings(void);
