@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int current_N = 3;
+int current_K = 3;
+
 // input.c
 void show_main_menu(void);
 int read_menu_choice(void);
@@ -13,12 +16,12 @@ void start_pvp(void);
 void start_pvc(void);
 void start_settings(void);
 
-int main(void) {
+int main(void)
+{
     while (1) {
         clear_screen();
         show_main_menu();
         int choice = read_menu_choice();
-
         switch (choice) {
             case 1:
                 start_pvp();
@@ -39,6 +42,5 @@ int main(void) {
                 break;
         }
     }
-
     return 0;
 }
