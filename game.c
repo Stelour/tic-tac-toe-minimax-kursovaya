@@ -14,6 +14,7 @@ int read_new_level(void);
 
 //ai.c
 void get_random_move(char **field, int N, int *out_row, int *out_col);
+void get_minimax_move(char **field, int N, int K, int *out_row, int *out_col);
 
 extern int current_N;
 extern int current_K;
@@ -95,7 +96,6 @@ void start_pvp(void) {
         pause_for_enter();
         return;
     }
-
     for (int i = 0; i < N; i++) {
         field[i] = malloc(N * sizeof(char));
         if (field[i] == NULL) {
@@ -118,7 +118,7 @@ void start_pvp(void) {
         printf("      PvP (N=%d, K=%d)\n\n", N, K);
         print_field(N, field);
 
-        printf("\nХод игрока %c. Введите номер строки и столбца: ", current_player);
+        printf("\nХод игрока %c. Введите номер строки и столбца (или 0 0 для выхода): ", current_player);
         if (scanf("%d %d", &input_row, &input_col) != 2) {
             int tmp;
             while ((tmp = getchar()) != '\n' && tmp != EOF) { }
@@ -128,6 +128,11 @@ void start_pvp(void) {
         }
         int tmp;
         while ((tmp = getchar()) != '\n' && tmp != EOF) { }
+
+        if (input_row == 0 && input_col == 0) {
+            free_field(N, field);
+            return;
+        }
 
         int row = input_row - 1;
         int col = input_col - 1;
@@ -195,8 +200,7 @@ void start_pvp(void) {
     }
 }
 
-void start_pvc(void)
-{
+void start_pvc(void) {
     int N = current_N;
     int K = current_K;
 
@@ -222,17 +226,15 @@ void start_pvc(void)
     int moves_count = 0;
 
     init_field(N, field);
-
     srand((unsigned) time(NULL));
 
     while (1) {
         clear_screen();
-        printf("      PvC (N=%d, K=%d, уровень ИИ=%d)\n\n",
-               N, K, current_level);
+        printf("      PvC (N=%d, K=%d, уровень ИИ=%d)\n\n", N, K, current_level);
         print_field(N, field);
 
         if (current_player == CROSS) {
-            printf("\nВаш ход (X). Введите номер строки и столбца: ");
+            printf("\nВаш ход (X). Введите номер строки и столбца (или 0 0 для выхода): ");
             if (scanf("%d %d", &input_row, &input_col) != 2) {
                 int tmp;
                 while ((tmp = getchar()) != '\n' && tmp != EOF) { }
@@ -242,6 +244,11 @@ void start_pvc(void)
             }
             int tmp;
             while ((tmp = getchar()) != '\n' && tmp != EOF) { }
+
+            if (input_row == 0 && input_col == 0) {
+                free_field(N, field);
+                return;
+            }
 
             int row = input_row - 1;
             int col = input_col - 1;
@@ -262,7 +269,7 @@ void start_pvc(void)
             if (check_win(N, K, field, CROSS)) {
                 clear_screen();
                 printf("========================================\n");
-                printf("=      PvC завершён: Победили X        =\n");
+                printf("=     PvC завершён: Победили X        =\n");
                 printf("========================================\n");
                 printf("Финальное поле:\n\n");
                 print_field(N, field);
@@ -285,7 +292,7 @@ void start_pvc(void)
             if (moves_count == N * N) {
                 clear_screen();
                 printf("========================================\n");
-                printf("=             Ничья (Draw)             =\n");
+                printf("=            Ничья (Draw)             =\n");
                 printf("========================================\n");
                 printf("Финальное поле:\n\n");
                 print_field(N, field);
@@ -306,13 +313,18 @@ void start_pvc(void)
             }
 
             current_player = ZERO;
-        } else {
+        }
+        else {
             printf("\nХод компьютера (O)...\n");
             pause_for_enter();
 
+            int r, c;
             if (current_level == 1) {
-                int r, c;
                 get_random_move(field, N, &r, &c);
+                field[r][c] = ZERO;
+                moves_count++;
+            } else if (current_level == 2) {
+                get_minimax_move(field, N, K, &r, &c);
                 field[r][c] = ZERO;
                 moves_count++;
             } else {
