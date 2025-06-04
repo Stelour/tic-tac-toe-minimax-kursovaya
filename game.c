@@ -15,6 +15,7 @@ int read_new_level(void);
 //ai.c
 void get_random_move(char **field, int N, int *out_row, int *out_col);
 void get_minimax_move(char **field, int N, int K, int *out_row, int *out_col);
+void get_alphabeta_move(char **field, int N, int K, int *out_row, int *out_col);
 
 extern int current_N;
 extern int current_K;
@@ -176,7 +177,7 @@ void start_pvp(void) {
         if (moves_count == N * N) {
             clear_screen();
             printf("========================================\n");
-            printf("=            Ничья (Draw)             =\n");
+            printf("=             Ничья (Draw)             =\n");
             printf("========================================\n");
             printf("Финальное поле:\n\n");
             print_field(N, field);
@@ -269,7 +270,7 @@ void start_pvc(void) {
             if (check_win(N, K, field, CROSS)) {
                 clear_screen();
                 printf("========================================\n");
-                printf("=     PvC завершён: Победили X        =\n");
+                printf("=      PvC завершён: Победили X        =\n");
                 printf("========================================\n");
                 printf("Финальное поле:\n\n");
                 print_field(N, field);
@@ -292,7 +293,7 @@ void start_pvc(void) {
             if (moves_count == N * N) {
                 clear_screen();
                 printf("========================================\n");
-                printf("=            Ничья (Draw)             =\n");
+                printf("=             Ничья (Draw)             =\n");
                 printf("========================================\n");
                 printf("Финальное поле:\n\n");
                 print_field(N, field);
@@ -328,23 +329,14 @@ void start_pvc(void) {
                 field[r][c] = ZERO;
                 moves_count++;
             } else {
-                int done = 0;
-                for (int i = 0; i < N && !done; i++) {
-                    for (int j = 0; j < N; j++) {
-                        if (field[i][j] == EMPTY_CELL) {
-                            field[i][j] = ZERO;
-                            done = 1;
-                            moves_count++;
-                            break;
-                        }
-                    }
-                }
+                get_alphabeta_move(field, N, K, &r, &c);
+                field[r][c] = ZERO;
+                moves_count++;
             }
-
             if (check_win(N, K, field, ZERO)) {
                 clear_screen();
                 printf("========================================\n");
-                printf("=     PvC завершён: Победили O        =\n");
+                printf("=      PvC завершён: Победили O        =\n");
                 printf("========================================\n");
                 printf("Финальное поле:\n\n");
                 print_field(N, field);
@@ -367,7 +359,7 @@ void start_pvc(void) {
             if (moves_count == N * N) {
                 clear_screen();
                 printf("========================================\n");
-                printf("=            Ничья (Draw)             =\n");
+                printf("=             Ничья (Draw)             =\n");
                 printf("========================================\n");
                 printf("Финальное поле:\n\n");
                 print_field(N, field);
