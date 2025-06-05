@@ -270,7 +270,7 @@ void start_pvc(void) {
             if (check_win(N, K, field, CROSS)) {
                 clear_screen();
                 printf("========================================\n");
-                printf("=      PvC завершён: Победили X        =\n");
+                printf("=       PvC завершён: Победили X       =\n");
                 printf("========================================\n");
                 printf("Финальное поле:\n\n");
                 print_field(N, field);
